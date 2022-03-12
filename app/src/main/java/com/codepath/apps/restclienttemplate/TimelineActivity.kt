@@ -21,6 +21,8 @@ class TimelineActivity : AppCompatActivity() {
 
     lateinit var swipeContainer: SwipeRefreshLayout
 
+    private var scrollListener: EndlessRecyclerViewScrollListener? = null
+
     val tweets = ArrayList<Tweet>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +50,16 @@ class TimelineActivity : AppCompatActivity() {
         rvTweets.layoutManager = LinearLayoutManager(this)
         rvTweets.adapter = adapter
 
+//        scrollListener = object : EndlessRecyclerViewScrollListener(rvTweets.layoutManager as LinearLayoutManager) {
+//            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView) {
+//                // Triggered only when new data needs to be appended to the list
+//                // Add whatever code is needed to append new items to the bottom of the list
+//                loadNextDataFromApi(page)
+//            }
+//        }
+//
+//        rvTweets.addOnScrollListener(scrollListener)
+
         populateHomeTimeline()
     }
 
@@ -65,6 +77,8 @@ class TimelineActivity : AppCompatActivity() {
             override fun onSuccess(statusCode: Int, headers: Headers, json: JSON) {
                 Log.i(TAG, "onSuccess")
                 val jsonArray = json.jsonArray
+
+                Log.i(TAG, "Json: $jsonArray")
 
                 try {
                     // Clear old tweets
